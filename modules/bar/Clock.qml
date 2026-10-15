@@ -7,7 +7,7 @@ Capsule {
     id: root
 
     CenteredText {
-        text: `${Time.twentyFourHourTimeDate}`
+        text: Time.twentyFourHourTimeDate
         color: Theme.textOnSurface
         font.pointSize: Theme.widgetFontSize
         font.family: Theme.fontFamily

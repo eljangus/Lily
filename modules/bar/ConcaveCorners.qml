@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Wayland
 import qs.config
 
 PanelWindow {
@@ -11,8 +10,6 @@ PanelWindow {
 
     screen: modelData
     color: "transparent"
-    visible: true
-    WlrLayershell.layer: WlrLayer.Top
     exclusionMode: ExclusionMode.Ignore
 
     anchors {
@@ -43,8 +40,6 @@ PanelWindow {
             }
 
             Behavior on opacity {
-                enabled: true
-
                 NumberAnimation {
                     duration: 150
                 }
@@ -69,10 +64,9 @@ PanelWindow {
         }
 
         layer.effect: MultiEffect {
-            shadowEnabled: Theme.enableFrameShadow
-            shadowOpacity: Theme.frameShadowOpacity
+            shadowEnabled: Theme.frameShadowEnabled
             shadowBlur: Theme.frameShadowBlur
-            shadowColor: Qt.alpha(Theme.shadowColor, 1)
+            shadowColor: Theme.frameShadowColor
             blurMultiplier: 1
         }
     }

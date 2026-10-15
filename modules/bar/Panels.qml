@@ -1,25 +1,18 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
-import Quickshell.Widgets
 import qs.config
 
 Scope {
     Variants {
         model: Quickshell.screens
 
-        ConcaveCorners {
-        }
-
+        ConcaveCorners {}
     }
 
     Variants {
         model: Quickshell.screens
 
         ExclusivePanel {
-            id: bottomFrame
-
             implicitHeight: Theme.frameWidth
 
             anchors {
@@ -27,17 +20,13 @@ Scope {
                 right: true
                 left: true
             }
-
         }
-
     }
 
     Variants {
         model: Quickshell.screens
 
         ExclusivePanel {
-            id: leftFrame
-
             implicitWidth: Theme.frameWidth
 
             anchors {
@@ -45,17 +34,13 @@ Scope {
                 top: true
                 left: true
             }
-
         }
-
     }
 
     Variants {
         model: Quickshell.screens
 
         ExclusivePanel {
-            id: rightFrame
-
             implicitWidth: Theme.frameWidth
 
             anchors {
@@ -63,17 +48,13 @@ Scope {
                 right: true
                 bottom: true
             }
-
         }
-
     }
 
     Variants {
         model: Quickshell.screens
 
         ExclusivePanel {
-            id: topFrame
-
             implicitHeight: Theme.barHeight
 
             anchors {
@@ -81,9 +62,6 @@ Scope {
                 right: true
                 left: true
             }
-
         }
-
     }
-
 }

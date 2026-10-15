@@ -1,5 +1,6 @@
 import QtQuick
 import qs.config
+import qs.components
 import qs.services
 
 Capsule {
@@ -81,17 +82,12 @@ Capsule {
             font.pixelSize: root.pillFontSize
         }
 
-        Text {
+        CenteredText {
             id: wsText
 
-            width: rail.width - root.textGap * 2
             elide: Text.ElideRight
+            width: rail.width - root.textGap * 2
             anchors.centerIn: parent
-            anchors.horizontalCenterOffset: (contentWidth / 2) - (fontMetrics.tightBoundingRect(text).x + fontMetrics.tightBoundingRect(text).width / 2)
-            anchors.verticalCenterOffset: (height / 2) - (baselineOffset + fontMetrics.tightBoundingRect(text).y + fontMetrics.tightBoundingRect(text).height / 2)
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            // gl yo
             text: ((Niri.activeName[root.screenName] && root.isPaddingOverride) ? root.getChar(Niri.activeName[root.screenName], 0) : Niri.activeName[root.screenName] ? Niri.activeName[root.screenName] : (root.isPaddingOverride && Niri.activeIdx[root.screenName]) ? Niri.activeIdx[root.screenName] % 10 : Niri.activeIdx[root.screenName]) ?? ""
             color: Theme.surfaceContainer
             font.pixelSize: root.pillFontSize
@@ -108,14 +104,12 @@ Capsule {
 
         Rectangle {
             id: pills
-            // lord have mercy
             x: (model.idx - 1) * root.dotSlot + root.dotMargin + root.edgePadding
             y: (root.height - pills.height) / 2
 
             TapHandler {
                 id: tapWorkspacePills
 
-                enabled: true
                 parent: pills
                 longPressThreshold: 0
                 gesturePolicy: TapHandler.DragThreshold

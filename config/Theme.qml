@@ -53,13 +53,17 @@ Singleton {
     readonly property real gothRight: 0
     readonly property real gothTop: 0
     readonly property real frameWidth: 15
-    readonly property real frameShadowOpacity: 1
+    // Shadows
+    readonly property bool widgetShadowEnabled: false
+    readonly property color widgetShadowColor: Qt.alpha(shadowColor, widgetShadowOpacity)
+    readonly property real widgetShadowOpacity: 0.3
+    readonly property real widgetShadowBlur: 16
+    readonly property vector2d widgetShadowOffset: Qt.vector2d(0, 0)
+    readonly property real widgetShadowSpread: -4
+    readonly property bool frameShadowEnabled: true
+    readonly property color frameShadowColor: Qt.alpha(shadowColor, frameShadowOpacity)
+    readonly property real frameShadowOpacity: 0.8
     readonly property real frameShadowBlur: 0.6
-    readonly property real shadowBlur: 16
-    readonly property vector2d shadowOffset: Qt.vector2d(0, 0)
-    readonly property real shadowSpread: -4
-    readonly property bool enableWidgetShadow: false
-    readonly property bool enableFrameShadow: true
     // Capsule (background behind each bar widget)
     readonly property real capsuleRadiusOverride: 30
     readonly property real capsuleRadius: capsuleRadiusOverride >= 0 ? capsuleRadiusOverride : Math.max(0, barRadius - barPaddingVert)
@@ -78,5 +82,5 @@ Singleton {
     readonly property real rippleDurationScalePress: 300
     readonly property real rippleDurationOpacityPress: 80
     readonly property real rippleDurationOpacityRelease: 250
-    readonly property real rippleOpacity: 0.3
+    readonly property real rippleOpacity: 1
 }

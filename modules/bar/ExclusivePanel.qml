@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import qs.config
 
@@ -13,7 +12,5 @@ PanelWindow {
     implicitHeight: Theme.frameWidth
     exclusionMode: ExclusionMode.Auto
 
-    mask: Region {
-    }
-
+    mask: Region {}
 }

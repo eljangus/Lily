@@ -24,16 +24,14 @@ Item {
     }
 
     RectangularShadow {
+        visible: Theme.widgetShadowEnabled
         anchors.fill: capsule
         antialiasing: true
-        blur: Theme.shadowBlur
-        bottomLeftRadius: Theme.capsuleRadius
-        bottomRightRadius: Theme.capsuleRadius
-        topLeftRadius: Theme.capsuleRadius
-        topRightRadius: Theme.capsuleRadius
-        offset: Theme.shadowOffset
-        spread: Theme.shadowSpread
-        color: Theme.enableWidgetShadow ? Qt.alpha(Theme.shadowColor, 0.4) : "transparent"
+        blur: Theme.widgetShadowBlur
+        radius: Theme.capsuleRadius
+        offset: Theme.widgetShadowOffset
+        spread: Theme.widgetShadowSpread
+        color: Theme.widgetShadowColor
     }
 
     Rectangle {

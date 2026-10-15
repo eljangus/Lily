@@ -1,11 +1,11 @@
 import QtQuick
-import qs.config
 
 Item {
     id: root
     property alias font: inner.font
     property alias color: inner.color
     property alias text: inner.text
+    property alias elide: inner.elide
 
     implicitWidth: inner.implicitWidth
     implicitHeight: inner.implicitHeight
@@ -19,8 +19,12 @@ Item {
     Text {
         id: inner
 
+        width: root.width
+        height: root.height
         anchors.centerIn: parent
-        anchors.horizontalCenterOffset: (width / 2) - (fontMetrics.tightBoundingRect(text).x + fontMetrics.tightBoundingRect(text).width / 2)
-        anchors.verticalCenterOffset: (height / 2) - (baselineOffset + fontMetrics.tightBoundingRect(text).y + fontMetrics.tightBoundingRect(text).height / 2)
+        // calculate the offset based of the text's true ink, not just the cell / space a character should take up
+        // makes sure that e.g nerd font icons will always be centered in a WS pill
+        anchors.horizontalCenterOffset: (width / 2) - (fontMetrics.tightBoundingRect(fontMetrics.elidedText(text, elide, width)).x + fontMetrics.tightBoundingRect(fontMetrics.elidedText(text, elide, width)).width / 2)
+        anchors.verticalCenterOffset: (height / 2) - (baselineOffset + fontMetrics.tightBoundingRect(fontMetrics.elidedText(text, elide, width)).y + fontMetrics.tightBoundingRect(fontMetrics.elidedText(text, elide, width)).height / 2)
     }
 }
