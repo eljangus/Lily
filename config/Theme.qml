@@ -69,15 +69,14 @@ Singleton {
     readonly property real capsuleRadius: capsuleRadiusOverride >= 0 ? capsuleRadiusOverride : Math.max(0, barRadius - barPaddingVert)
     readonly property real capsulePadding: 6
     readonly property real capsulePaddingHorizontal: 6
-    // pillMargin makes it fit perfectly
-    readonly property real pillRadiusOverride: -1
-    readonly property real pillRadius: pillRadiusOverride >= 0 ? pillRadiusOverride : Math.max(0, capsuleRadius - pillMargin)
-    readonly property real pillMargin: 5
-    readonly property real pillExtraDotMarginOverride: 2
-    readonly property real pillExtraDotMargin: pillExtraDotMarginOverride >= 0 ? pillExtraDotMarginOverride : 0
-    readonly property real pillPaddingActiveOverride: 0 // -1 makes it a perfect circle / square
-    readonly property real pillPaddingActive: pillPaddingActiveOverride >= 0 ? pillPaddingActiveOverride : 0
-    readonly property real pillMaxActivePillWidth: 2
+    // railMargin makes it fit perfectly
+    readonly property real railRadiusOverride: -1
+    readonly property real railRadius: railRadiusOverride >= 0 ? railRadiusOverride : Math.max(0, capsuleRadius - railMargin)
+    readonly property real railMargin: 5
+    readonly property real dotExtraMargin: 2 // 0 to have no extra margin and have it perfectly spaced
+    readonly property bool railSquareMode: false // true = perfect circle / square showing only the first character
+    readonly property real railPadding: 0 // extra rail width, only used when railSquareMode is false
+    readonly property real railMaxWidthRatio: 2
     // Animations and Extras
     readonly property real rippleDurationScalePress: 300
     readonly property real rippleDurationOpacityPress: 80

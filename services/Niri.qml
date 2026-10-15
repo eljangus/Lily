@@ -6,7 +6,7 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    readonly property var socketPath: Quickshell.env("NIRI_SOCKET")
+    readonly property string socketPath: Quickshell.env("NIRI_SOCKET")
     property var workspacesList: []
     property ListModel workspaces
     property var activeIdx: ({})

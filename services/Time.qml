@@ -1,6 +1,6 @@
+pragma Singleton
 import QtQuick
 import Quickshell
-pragma Singleton
 
 Singleton {
     id: root
@@ -14,5 +14,4 @@ Singleton {
 
         precision: SystemClock.Minutes
     }
-
 }

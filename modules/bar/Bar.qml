@@ -5,7 +5,7 @@ import qs.config
 Item {
     id: root
 
-    property var screenName
+    property string screenName
 
     implicitHeight: Theme.barHeight
 

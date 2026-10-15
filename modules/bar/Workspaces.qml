@@ -8,15 +8,16 @@ Capsule {
 
     property string screenName
     property real dotSize: root.height / 4
-    property real activePillWidth: Math.min(rail.height + Theme.pillPaddingActive + (Theme.pillPaddingActiveOverride >= 0 ? widestLabelPerOutput() : 0), rail.height * Theme.pillMaxActivePillWidth)
+    property real railWidth: Math.min(rail.height + (Theme.railSquareMode ? 0 : Theme.railPadding + widestLabelPerOutput()), rail.height * Theme.railMaxWidthRatio)
     property real railGap: (root.height - rail.implicitHeight) / 2
     property real textGap: (rail.height - fontMetrics.tightBoundingRect("O").height) / 2 // "O" is just a reference string, if you like using Umlauts or other characters in your ws names, you may use something like "Ö" instead
-    property real dotMargin: (railGap + rail.width / 2 - dotSize / 2) / 2 + Theme.pillExtraDotMargin
+    property real dotMargin: (railGap + rail.width / 2 - dotSize / 2) / 2 + Theme.dotExtraMargin
     property real dotSlot: dotMargin * 2 + dotSize
     property real rowWidth: (Niri.largestIdx[root.screenName]) * dotSlot + edgePadding * 2
     property real edgePadding: railGap + (rail.width - dotSlot) / 2
-    property real pillFontSize: Math.max(0, rail.height * 0.65)
-    property bool isPaddingOverride: Theme.pillPaddingActiveOverride < 0
+    property real railFontSize: Math.max(0, rail.height * 0.65)
+    property string niriActiveName: Niri.activeName[root.screenName] ?? ""
+    property int niriActiveIdx: Niri.activeIdx[root.screenName] ?? 0
 
     implicitWidth: rowWidth
 
@@ -39,8 +40,8 @@ Capsule {
         return longestLabel[root.screenName];
     }
 
-    function getChar(string, char) {
-        return [...string][char];
+    function getChar(string, index) {
+        return [...string][index];
     }
 
     WheelHandler {
@@ -61,11 +62,11 @@ Capsule {
         id: rail
 
         parent: root
-        implicitWidth: root.activePillWidth
-        implicitHeight: root.height - Theme.pillMargin * 2
+        implicitWidth: root.railWidth
+        implicitHeight: root.height - Theme.railMargin * 2
         y: (root.height - implicitHeight) / 2
-        x: (Niri.activeIdx[root.screenName] - 1) * root.dotSlot + root.dotMargin + root.edgePadding - rail.width / 2 + root.dotSize / 2
-        radius: Theme.pillRadius
+        x: (root.niriActiveIdx - 1) * root.dotSlot + root.dotMargin + root.edgePadding - rail.width / 2 + root.dotSize / 2
+        radius: Theme.railRadius
         color: Theme.primary
 
         Behavior on x {
@@ -79,7 +80,7 @@ Capsule {
             id: fontMetrics
 
             font.family: Theme.fontFamily
-            font.pixelSize: root.pillFontSize
+            font.pixelSize: root.railFontSize
         }
 
         CenteredText {
@@ -88,9 +89,9 @@ Capsule {
             elide: Text.ElideRight
             width: rail.width - root.textGap * 2
             anchors.centerIn: parent
-            text: ((Niri.activeName[root.screenName] && root.isPaddingOverride) ? root.getChar(Niri.activeName[root.screenName], 0) : Niri.activeName[root.screenName] ? Niri.activeName[root.screenName] : (root.isPaddingOverride && Niri.activeIdx[root.screenName]) ? Niri.activeIdx[root.screenName] % 10 : Niri.activeIdx[root.screenName]) ?? ""
+            text: ((root.niriActiveName && Theme.railSquareMode) ? root.getChar(root.niriActiveName, 0) : root.niriActiveName ? root.niriActiveName : (Theme.railSquareMode && root.niriActiveIdx) ? root.niriActiveIdx % 10 : root.niriActiveIdx)
             color: Theme.surfaceContainer
-            font.pixelSize: root.pillFontSize
+            font.pixelSize: root.railFontSize
             font.family: Theme.fontFamily
         }
     }
@@ -103,14 +104,11 @@ Capsule {
         model: Niri.workspaces
 
         Rectangle {
-            id: pills
+            id: dot
             x: (model.idx - 1) * root.dotSlot + root.dotMargin + root.edgePadding
-            y: (root.height - pills.height) / 2
+            y: (root.height - dot.height) / 2
 
             TapHandler {
-                id: tapWorkspacePills
-
-                parent: pills
                 longPressThreshold: 0
                 gesturePolicy: TapHandler.DragThreshold
                 onTapped: {
@@ -119,25 +117,24 @@ Capsule {
             }
 
             HoverHandler {
-                id: hoverWorkspacePills
+                id: hoverWorkspaceDot
 
                 enabled: parent.enabled
-                parent: pills
-                // enable blocking to no longer hover the capsule once you hover a pill
+                // enable blocking to no longer hover the capsule once you hover a dot
                 blocking: false
                 cursorShape: model.isActive ? Qt.ArrowCursor : Qt.PointingHandCursor
             }
 
             PointHandler {
-                id: pointWorkspacePills
+                id: pointWorkspaceDot
             }
 
             visible: root.screenName === model.output
-            color: model.isUrgent ? Theme.error : (hoverWorkspacePills.hovered || pointWorkspacePills.active) ? Theme.secondary : model.isActive ? Theme.primary : Theme.textOnSurface
-            opacity: model.isUrgent ? 1 : (hoverWorkspacePills.hovered || pointWorkspacePills.active) ? 1 : model.isOccupied ? 0.8 : 0.2
+            color: model.isUrgent ? Theme.error : (hoverWorkspaceDot.hovered || pointWorkspaceDot.active) ? Theme.secondary : model.isActive ? Theme.primary : Theme.textOnSurface
+            opacity: model.isUrgent ? 1 : (hoverWorkspaceDot.hovered || pointWorkspaceDot.active) ? 1 : model.isOccupied ? 0.8 : 0.2
             implicitWidth: dotSize
             implicitHeight: dotSize
-            radius: Theme.pillRadius
+            radius: Theme.railRadius
 
             Behavior on color {
                 ColorAnimation {
