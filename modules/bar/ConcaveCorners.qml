@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
 import Quickshell
@@ -31,7 +32,7 @@ PanelWindow {
             layer.enabled: true
 
             layer.effect: MultiEffect {
-                maskSource: mask
+                maskSource: maskItem
                 maskEnabled: true
                 maskInverted: true
                 maskThresholdMin: 0.5
@@ -47,7 +48,7 @@ PanelWindow {
         }
 
         Item {
-            id: mask
+            id: maskItem
 
             anchors.fill: parent
             layer.enabled: true

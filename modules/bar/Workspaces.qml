@@ -107,7 +107,7 @@ Capsule {
 
             elide: Text.ElideRight
             width: rail.width - root.textGap * 2
-            anchors.centerIn: parent
+            anchors.centerIn: rail
             text: root.getWsText()
             color: Theme.surfaceContainer
             font.pixelSize: root.railFontSize
