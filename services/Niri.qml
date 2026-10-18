@@ -7,7 +7,6 @@ Singleton {
     id: root
 
     readonly property string socketPath: Quickshell.env("NIRI_SOCKET")
-    property var workspacesList: []
     property ListModel workspaces
     property var activeIdx: ({})
     property var largestIdx: ({})
@@ -15,6 +14,7 @@ Singleton {
 
     function eventHandler(event) {
         if (event.WorkspacesChanged) {
+            let workspacesList = [];
             // load the array from the Niri socket into workspacesList
             workspacesList = event.WorkspacesChanged.workspaces.slice();
             // Sort workspaces by output, then by index
@@ -52,7 +52,6 @@ Singleton {
         }
         // handle isFocused and isActive
         if (event.WorkspaceActivated) {
-            // I fucking hate JS so much grr
             let localActiveIdx = Object.assign({}, activeIdx);
             let localActiveName = Object.assign({}, activeName);
             for (let i = 0; i < workspaces.count; i++) {
@@ -126,7 +125,7 @@ Singleton {
     Timer {
         interval: 1000
         repeat: true
-        running: !eventSocket.connected || !requestSocket.connected
+        running: (!eventSocket.connected || !requestSocket.connected) && root.socketPath !== ""
         onTriggered: {
             if (!eventSocket.connected)
                 eventSocket.connected = true;
@@ -140,7 +139,7 @@ Singleton {
     Socket {
         id: eventSocket
 
-        connected: true
+        connected: root.socketPath !== ""
         path: root.socketPath
         onConnectionStateChanged: {
             if (connected) {
@@ -151,7 +150,16 @@ Singleton {
 
         parser: SplitParser {
             onRead: (data) => {
-                const msg = JSON.parse(data);
+                let msg;
+
+                try {
+                    msg = JSON.parse(data);
+                }
+                catch(e) {
+                    console.warn(`niri: couldn't parse event -> ${e}\nevent: ${data}`);
+                    return;
+                }
+
                 root.eventHandler(msg);
             }
         }
@@ -161,18 +169,33 @@ Singleton {
     Socket {
         id: requestSocket
 
-        connected: true
+        connected: root.socketPath !== ""
         path: root.socketPath
 
         parser: SplitParser {
             onRead: (reply) => {
-                const socketLog = JSON.parse(reply);
-                console.log(JSON.stringify(socketLog));
+                let socketReply;
+
+                try {
+                    socketReply = JSON.parse(reply);
+                }
+                catch(e) {
+                    console.warn(`niri: couldn't parse reply -> ${e}\nreply: ${reply}`);
+                    return;
+                }
+
+                if ("Err" in socketReply)
+                    console.warn(`niri: ${socketReply.Err}`);
             }
         }
 
     }
 
     workspaces: ListModel {
+    }
+
+    Component.onCompleted: {
+        if (!root.socketPath)
+            console.warn("NIRI_SOCKET is not set, Lily currently strictly requires Niri to run.");
     }
 }
