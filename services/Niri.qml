@@ -31,7 +31,7 @@ Singleton {
             // append the parsed json array to workspaces
             for (let ws of workspacesList) {
                 workspaces.append({
-                    "id": ws.id,
+                    "wsId": ws.id,
                     "idx": ws.idx,
                     "name": ws.name || "",
                     "output": ws.output || "",
@@ -56,7 +56,7 @@ Singleton {
             let localActiveIdx = Object.assign({}, activeIdx);
             let localActiveName = Object.assign({}, activeName);
             for (let i = 0; i < workspaces.count; i++) {
-                if (workspaces.get(i).id === event.WorkspaceActivated.id) {
+                if (workspaces.get(i).wsId === event.WorkspaceActivated.id) {
                     const output = workspaces.get(i).output;
                     workspaces.setProperty(i, "isActive", true);
                     for (let j = 0; j < workspaces.count; j++) {
@@ -81,7 +81,7 @@ Singleton {
         // change workspace color if urgent window appears
         if (event.WorkspaceUrgencyChanged) {
             for (let i = 0; i < workspaces.count; i++) {
-                if (workspaces.get(i).id === event.WorkspaceUrgencyChanged.id) {
+                if (workspaces.get(i).wsId === event.WorkspaceUrgencyChanged.id) {
                     workspaces.setProperty(i, "isUrgent", event.WorkspaceUrgencyChanged.urgent);
                     break;
                 }
@@ -89,7 +89,7 @@ Singleton {
         }
         if (event.WorkspaceActiveWindowChanged) {
             for (let i = 0; i < workspaces.count; i++) {
-                if (workspaces.get(i).id === event.WorkspaceActiveWindowChanged.workspace_id) {
+                if (workspaces.get(i).wsId === event.WorkspaceActiveWindowChanged.workspace_id) {
                     workspaces.setProperty(i, "isOccupied", event.WorkspaceActiveWindowChanged.active_window_id ? true : false);
                     break;
                 }

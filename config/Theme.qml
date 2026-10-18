@@ -40,7 +40,7 @@ Singleton {
     readonly property color success: "#22444d"
     // Fonts
     readonly property real widgetFontSize: 15
-    readonly property string fontFamily: "Iosevka Nerd Font"
+    readonly property string fontFamily: "JetBrainsMono Nerd Font"
     // Bar
     readonly property real barHeight: 50
     readonly property real barRadius: 0

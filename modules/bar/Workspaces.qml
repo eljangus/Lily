@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import qs.config
 import qs.components
@@ -19,7 +20,20 @@ Capsule {
     property string niriActiveName: Niri.activeName[root.screenName] ?? ""
     property int niriActiveIdx: Niri.activeIdx[root.screenName] ?? 0
 
-    implicitWidth: rowWidth
+    onNiriActiveIdxChanged: {
+        if (root.niriActiveIdx)
+            Qt.callLater(() => xAnim.enabled = true);
+    }
+
+    function getWsText() {
+        if (root.niriActiveName && Theme.railSquareMode)
+            return root.getChar(root.niriActiveName, 0);
+        if (root.niriActiveName)
+            return root.niriActiveName;
+        if (Theme.railSquareMode)
+            return root.niriActiveIdx % 10;
+        return root.niriActiveIdx;
+    }
 
     function widestLabelPerOutput() {
         let longestLabel = {
@@ -44,6 +58,8 @@ Capsule {
         return [...string][index];
     }
 
+    implicitWidth: rowWidth
+
     WheelHandler {
         id: scrollWheelWorkspaces
 
@@ -61,6 +77,7 @@ Capsule {
     Rectangle {
         id: rail
 
+        visible: root.niriActiveIdx !== 0
         parent: root
         implicitWidth: root.railWidth
         implicitHeight: root.height - Theme.railMargin * 2
@@ -70,6 +87,8 @@ Capsule {
         color: Theme.primary
 
         Behavior on x {
+            id: xAnim
+            enabled: false
             NumberAnimation {
                 duration: 170
                 easing.type: Easing.OutBack
@@ -89,7 +108,7 @@ Capsule {
             elide: Text.ElideRight
             width: rail.width - root.textGap * 2
             anchors.centerIn: parent
-            text: ((root.niriActiveName && Theme.railSquareMode) ? root.getChar(root.niriActiveName, 0) : root.niriActiveName ? root.niriActiveName : (Theme.railSquareMode && root.niriActiveIdx) ? root.niriActiveIdx % 10 : root.niriActiveIdx)
+            text: root.getWsText()
             color: Theme.surfaceContainer
             font.pixelSize: root.railFontSize
             font.family: Theme.fontFamily
@@ -105,14 +124,22 @@ Capsule {
 
         Rectangle {
             id: dot
-            x: (model.idx - 1) * root.dotSlot + root.dotMargin + root.edgePadding
+
+            required property int wsId
+            required property int idx
+            required property bool isActive
+            required property bool isOccupied
+            required property bool isUrgent
+            required property string output
+
+            x: (dot.idx - 1) * root.dotSlot + root.dotMargin + root.edgePadding
             y: (root.height - dot.height) / 2
 
             TapHandler {
                 longPressThreshold: 0
                 gesturePolicy: TapHandler.DragThreshold
                 onTapped: {
-                    Niri.focusWorkspace(model.id);
+                    Niri.focusWorkspace(dot.wsId);
                 }
             }
 
@@ -122,18 +149,18 @@ Capsule {
                 enabled: parent.enabled
                 // enable blocking to no longer hover the capsule once you hover a dot
                 blocking: false
-                cursorShape: model.isActive ? Qt.ArrowCursor : Qt.PointingHandCursor
+                cursorShape: dot.isActive ? Qt.ArrowCursor : Qt.PointingHandCursor
             }
 
             PointHandler {
                 id: pointWorkspaceDot
             }
 
-            visible: root.screenName === model.output
-            color: model.isUrgent ? Theme.error : (hoverWorkspaceDot.hovered || pointWorkspaceDot.active) ? Theme.secondary : model.isActive ? Theme.primary : Theme.textOnSurface
-            opacity: model.isUrgent ? 1 : (hoverWorkspaceDot.hovered || pointWorkspaceDot.active) ? 1 : model.isOccupied ? 0.8 : 0.2
-            implicitWidth: dotSize
-            implicitHeight: dotSize
+            visible: root.screenName === dot.output
+            color: dot.isUrgent ? Theme.error : (hoverWorkspaceDot.hovered || pointWorkspaceDot.active) ? Theme.secondary : dot.isActive ? Theme.primary : Theme.textOnSurface
+            opacity: dot.isUrgent ? 1 : (hoverWorkspaceDot.hovered || pointWorkspaceDot.active) ? 1 : dot.isOccupied ? 0.8 : 0.2
+            implicitWidth: root.dotSize
+            implicitHeight: root.dotSize
             radius: Theme.railRadius
 
             Behavior on color {
