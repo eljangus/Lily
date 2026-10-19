@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import qs.config
+import qs.modules.bar
 
 Variants {
     model: Quickshell.screens
@@ -10,7 +11,7 @@ Variants {
 
         required property var modelData
 
-        ConcaveCorners {
+        Frame {
             modelData: screenScope.modelData
         }
 

@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import qs.config
+import qs.modules.bar
 
 PanelWindow {
     id: root
