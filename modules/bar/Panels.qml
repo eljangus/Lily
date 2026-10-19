@@ -2,66 +2,40 @@ import QtQuick
 import Quickshell
 import qs.config
 
-Scope {
-    Variants {
-        model: Quickshell.screens
+Variants {
+    model: Quickshell.screens
 
-        ConcaveCorners {}
-    }
+    Scope {
+        id: screenScope
 
-    Variants {
-        model: Quickshell.screens
+        required property var modelData
 
-        ExclusivePanel {
-            implicitHeight: Theme.frameWidth
-
-            anchors {
-                bottom: true
-                right: true
-                left: true
-            }
+        ConcaveCorners {
+            modelData: screenScope.modelData
         }
-    }
-
-    Variants {
-        model: Quickshell.screens
 
         ExclusivePanel {
-            implicitWidth: Theme.frameWidth
-
-            anchors {
-                bottom: true
-                top: true
-                left: true
-            }
+            modelData: screenScope.modelData
+            edge: "bottom"
+            size: Theme.frameWidth
         }
-    }
-
-    Variants {
-        model: Quickshell.screens
 
         ExclusivePanel {
-            implicitWidth: Theme.frameWidth
-
-            anchors {
-                top: true
-                right: true
-                bottom: true
-            }
+            modelData: screenScope.modelData
+            edge: "left"
+            size: Theme.frameWidth
         }
-    }
-
-    Variants {
-        model: Quickshell.screens
 
         ExclusivePanel {
-            implicitHeight: Theme.barHeight
+            modelData: screenScope.modelData
+            edge: "right"
+            size: Theme.frameWidth
+        }
 
-            anchors {
-                top: true
-                right: true
-                left: true
-            }
+        ExclusivePanel {
+            modelData: screenScope.modelData
+            edge: "top"
+            size: Theme.barHeight
         }
     }
 }
