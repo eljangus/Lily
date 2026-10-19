@@ -4,6 +4,7 @@ import QtQuick.Effects
 import Quickshell
 import qs.config
 import qs.modules.bar
+import qs.modules.dock
 
 PanelWindow {
     id: root
@@ -40,12 +41,6 @@ PanelWindow {
                 maskSpreadAtMin: 1
                 autoPaddingEnabled: false
             }
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 150
-                }
-            }
         }
 
         Item {
@@ -71,6 +66,95 @@ PanelWindow {
             shadowColor: Theme.frameShadowColor
             blurMultiplier: 1
         }
+
+        Rectangle {
+            id: dockBandLeft
+
+            visible: false // only temporary to hide while I'm working on it
+
+            color: Theme.surface
+            layer.enabled: true
+
+            anchors {
+                top: dock.top
+                bottom: dock.bottom
+                right: dock.left
+                left: container.left
+            }
+
+            layer.effect: MultiEffect {
+                maskSource: maskItemDockLeft
+                maskEnabled: true
+                maskInverted: true
+                maskThresholdMin: 0.5
+                maskSpreadAtMin: 1
+                autoPaddingEnabled: false
+            }
+
+            Item {
+                id: maskItemDockLeft
+
+                anchors.fill: parent
+                layer.enabled: true
+                visible: false
+
+                Rectangle {
+                    bottomRightRadius: Theme.dockRadius
+                    anchors.fill: parent
+                    anchors.bottomMargin: Theme.frameWidth
+                }
+            }
+        }
+
+        Rectangle {
+            id: dockBandRight
+
+            visible: false // only temporary to hide while I'm working on it
+
+            color: Theme.surface
+            layer.enabled: true
+
+            anchors {
+                top: dock.top
+                bottom: dock.bottom
+                right: container.right
+                left: dock.right
+            }
+
+            layer.effect: MultiEffect {
+                maskSource: maskItemDockRight
+                maskEnabled: true
+                maskInverted: true
+                maskThresholdMin: 0.5
+                maskSpreadAtMin: 1
+                autoPaddingEnabled: false
+            }
+
+            Item {
+                id: maskItemDockRight
+
+                anchors.fill: parent
+                layer.enabled: true
+                visible: false
+
+                Rectangle {
+                    bottomLeftRadius: Theme.dockRadius
+                    anchors.fill: parent
+                    anchors.bottomMargin: Theme.frameWidth
+                }
+            }
+        }
+
+        Dock {
+            id: dock
+
+            visible: false // only temporary to hide while I'm working on it
+
+            anchors {
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+        }
     }
 
     Bar {
@@ -88,5 +172,9 @@ PanelWindow {
 
     mask: Region {
         item: bar
+
+        Region {
+            item: dock
+        }
     }
 }

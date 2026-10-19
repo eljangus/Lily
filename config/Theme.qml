@@ -45,14 +45,18 @@ Singleton {
     readonly property real barHeight: 50
     readonly property real barRadius: 0
     readonly property real barPaddingHor: 10
-    readonly property real barPaddingVert: 8
+    readonly property real barPaddingVert: 6
     readonly property real barWidgetSpacing: 10
     readonly property real screenCornerRadius: 20
     readonly property real gothBottom: 0
     readonly property real gothLeft: 0
     readonly property real gothRight: 0
     readonly property real gothTop: 0
-    readonly property real frameWidth: 15
+    readonly property real frameWidth: 12
+    // Dock
+    readonly property real dockMargin: 7
+    readonly property int iconSize: 64 // placeholder
+    readonly property real dockRadius: screenCornerRadius
     // Shadows
     readonly property bool widgetShadowEnabled: false
     readonly property color widgetShadowColor: Qt.alpha(shadowColor, widgetShadowOpacity)
@@ -67,12 +71,12 @@ Singleton {
     // Capsule (background behind each bar widget)
     readonly property real capsuleRadiusOverride: 30
     readonly property real capsuleRadius: capsuleRadiusOverride >= 0 ? capsuleRadiusOverride : Math.max(0, barRadius - barPaddingVert)
-    readonly property real capsulePadding: 6
+    readonly property real capsulePadding: 7
     readonly property real capsulePaddingHorizontal: 6
     // railMargin makes it fit perfectly
     readonly property real railRadiusOverride: -1
     readonly property real railRadius: railRadiusOverride >= 0 ? railRadiusOverride : Math.max(0, capsuleRadius - railMargin)
-    readonly property real railMargin: 5
+    readonly property real railMargin: 6
     readonly property real dotExtraMargin: 2 // 0 to have no extra margin and have it perfectly spaced
     readonly property bool railSquareMode: false // true = perfect circle / square showing only the first character
     readonly property real railPadding: 0 // extra rail width, only used when railSquareMode is false

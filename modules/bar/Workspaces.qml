@@ -8,7 +8,7 @@ Capsule {
     id: root
 
     property string screenName
-    property real dotSize: root.height / 4
+    property real dotSize: root.height / 5
     property real railWidth: Math.min(rail.height + (Theme.railSquareMode ? 0 : Theme.railPadding + widestLabelPerOutput()), rail.height * Theme.railMaxWidthRatio)
     property real railGap: (root.height - rail.implicitHeight) / 2
     property real textGap: (rail.height - fontMetrics.tightBoundingRect("O").height) / 2 // "O" is just a reference string, if you like using Umlauts or other characters in your ws names, you may use something like "Ö" instead
@@ -95,6 +95,7 @@ Capsule {
 
             font.family: Theme.fontFamily
             font.pixelSize: root.railFontSize
+            font.weight: Font.Bold
         }
 
         CenteredText {
@@ -107,6 +108,7 @@ Capsule {
             color: Theme.surfaceContainer
             font.pixelSize: root.railFontSize
             font.family: Theme.fontFamily
+            font.weight: Font.Bold
         }
     }
 

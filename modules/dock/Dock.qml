@@ -1,53 +1,49 @@
+pragma ComponentBehavior: Bound
 import QtQuick
-import Quickshell
 import Quickshell.Widgets
+import QtQuick.Layouts
 import qs.config
 
-Scope {
+Item {
     id: root
 
-    Variants {
-        model: Quickshell.screens
+    implicitHeight: dock.implicitHeight
+    implicitWidth: dock.implicitWidth
 
-        PanelWindow {
-            required property var modelData
+    ClippingRectangle {
+        id: dock
+        color: Theme.surface
 
-            screen: modelData
-            visible: false
-            exclusionMode: ExclusionMode.Normal
-            exclusiveZone: 0
-            color: "transparent"
-            implicitHeight: dock.implicitHeight
+        topRightRadius: Theme.dockRadius
+        topLeftRadius: Theme.dockRadius
+
+        visible: true // will change this to only be visible on hover later
+
+        implicitHeight: (Theme.iconSize + Theme.dockMargin * 2) + Theme.frameWidth
+        implicitWidth: ((Theme.iconSize + Theme.dockMargin) * dockRepeater.model) + Theme.dockMargin
+        RowLayout {
+            id: dockEntries
+
+            spacing: Theme.dockMargin
 
             anchors {
-                bottom: true
-                left: true
-                right: true
+                top: parent.top
+                left: parent.left
+                right: parent.right
+                margins: Theme.dockMargin
             }
 
-            ClippingRectangle {
-                id: dock
+            Repeater {
+                id: dockRepeater
+                model: 6
+                // placeholder for now
+                Rectangle {
+                    color: Theme.surfaceContainer
 
-                radius: 20
-                contentInsideBorder: true
-                implicitHeight: 100
-                anchors.fill: parent
-                color: Theme.surface
-            }
-
-            // qmllint disable unqualified unresolved-type
-            margins {
-                bottom: 10
-                left: 700
-                right: 700
-            }
-
-            Text {
-                color: Theme.textOnSurface
-                font.pointSize: Theme.widgetFontSize
-                font.family: Theme.fontFamily
-                anchors.centerIn: parent
-                text: "Dock"
+                    radius: Theme.dockRadius - Theme.dockMargin
+                    implicitWidth: Theme.iconSize
+                    implicitHeight: Theme.iconSize
+                }
             }
         }
     }

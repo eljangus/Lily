@@ -4,6 +4,4 @@ import qs.modules.frame
 
 ShellRoot {
     Panels {}
-
-    Dock {}
 }
