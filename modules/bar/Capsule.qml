@@ -18,11 +18,6 @@ Item {
         id: hoverHandler
     }
 
-    // PointHandler just to make sure capsule stays highlighted if held
-    PointHandler {
-        id: pointHandler
-    }
-
     RectangularShadow {
         visible: Theme.widgetShadowEnabled
         anchors.fill: capsule
@@ -42,7 +37,7 @@ Item {
         color: (pointHandler.active || hoverHandler.hovered) ? Theme.surfaceContainerHigh : Theme.surfaceContainer
 
         PointHandler {
-            id: pointArea
+            id: pointHandler
 
             onActiveChanged: {
                 if (active) {

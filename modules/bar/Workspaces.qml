@@ -36,22 +36,17 @@ Capsule {
     }
 
     function widestLabelPerOutput() {
-        let longestLabel = {
-            [root.screenName]: 0
-        };
+        let widestLabelWidth = 0;
         let measureWidth = fontMetrics.advanceWidth;
         for (let i = 0; i < Niri.workspaces.count; i++) {
             let ws = Niri.workspaces.get(i);
-            if (root.screenName === ws.output) {
-                if (ws.name && (measureWidth(ws.name) > longestLabel[root.screenName])) {
-                    longestLabel[root.screenName] = measureWidth(ws.name);
-                }
-                if ((!ws.name) && (measureWidth(ws.idx) > longestLabel[root.screenName])) {
-                    longestLabel[root.screenName] = measureWidth(ws.idx);
-                }
-            }
+            if (root.screenName !== ws.output)
+                continue;
+            let labelWidth = measureWidth(ws.name) || measureWidth(ws.idx);
+            if (labelWidth > widestLabelWidth)
+                widestLabelWidth = labelWidth;
         }
-        return longestLabel[root.screenName];
+        return widestLabelWidth;
     }
 
     function getChar(string, index) {
