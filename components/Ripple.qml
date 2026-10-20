@@ -15,6 +15,8 @@ Item {
         maskSpreadAtMin: 1
     }
 
+    opacity: Theme.rippleOpacity
+
     required property real rootRadius
     property RippleCircle newestCircle
 
@@ -90,7 +92,7 @@ Item {
             target: ripple
             property: "opacity"
             from: 0
-            to: Theme.rippleOpacity
+            to: 1
             duration: Theme.rippleDurationOpacityPress
         }
 

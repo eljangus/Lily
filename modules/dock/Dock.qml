@@ -17,8 +17,9 @@ Item {
         topRightRadius: Theme.dockRadius
         topLeftRadius: Theme.dockRadius
 
-        implicitHeight: (Theme.iconSize + Theme.dockMargin * 2) + Theme.frameWidth
+        implicitHeight: (Theme.iconSize + Theme.dockMargin * 2)
         implicitWidth: ((Theme.iconSize + Theme.dockMargin) * dockRepeater.model) + Theme.dockMargin
+
         RowLayout {
             id: dockEntries
 
@@ -28,6 +29,7 @@ Item {
                 top: parent.top
                 left: parent.left
                 right: parent.right
+                bottom: parent.bottom
                 margins: Theme.dockMargin
             }
 

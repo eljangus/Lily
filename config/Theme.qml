@@ -11,6 +11,7 @@ Singleton {
     readonly property color surfaceContainerHigh: "#e8e8e8"
     readonly property color surfaceContainerHighest: "#e3e2e3"
     readonly property color surfaceBright: "#faf9f9"
+    readonly property real surfaceOpacity: 0.8
     // Text / lines on surfaces
     readonly property color textOnSurface: "#1a1c1c"
     readonly property color textOnSurfaceVariant: "#41484a"
@@ -73,6 +74,7 @@ Singleton {
     readonly property real capsuleRadius: capsuleRadiusOverride >= 0 ? capsuleRadiusOverride : Math.max(0, barRadius - barPaddingVert)
     readonly property real capsulePadding: 7
     readonly property real capsulePaddingHorizontal: 6
+    readonly property real capsuleOpacity: surfaceOpacity * surfaceOpacity
     // railMargin makes it fit perfectly
     readonly property real railRadiusOverride: -1
     readonly property real railRadius: railRadiusOverride >= 0 ? railRadiusOverride : Math.max(0, capsuleRadius - railMargin)
@@ -86,5 +88,5 @@ Singleton {
     readonly property real rippleDurationScalePress: 300
     readonly property real rippleDurationOpacityPress: 80
     readonly property real rippleDurationOpacityRelease: 250
-    readonly property real rippleOpacity: 1
+    readonly property real rippleOpacity: capsuleOpacity
 }

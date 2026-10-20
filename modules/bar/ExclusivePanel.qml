@@ -1,10 +1,15 @@
 import QtQuick
 import Quickshell
+import Quickshell.Wayland
 
 PanelWindow {
+    id: root
+
     required property var modelData
     required property string edge // something like "top" or "left"
     required property real size
+
+    WlrLayershell.namespace: `lily-exclusive-panel-${root.screen.name}`
 
     screen: modelData
     color: "transparent"

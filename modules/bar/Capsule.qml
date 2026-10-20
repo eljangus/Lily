@@ -34,7 +34,7 @@ Item {
 
         anchors.fill: root
         radius: Theme.capsuleRadius
-        color: (pointHandler.active || hoverHandler.hovered) ? Theme.surfaceContainerHigh : Theme.surfaceContainer
+        color: Qt.alpha(((pointHandler.active || hoverHandler.hovered) ? Theme.surfaceContainerHigh : Theme.surfaceContainer), Theme.capsuleOpacity)
 
         PointHandler {
             id: pointHandler

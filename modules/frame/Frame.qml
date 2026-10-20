@@ -3,12 +3,52 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import qs.config
 import qs.modules.bar
 import qs.modules.dock
 
 PanelWindow {
     id: root
+    WlrLayershell.namespace: `lily-frame-${root.screen.name}`
+    BackgroundEffect.blurRegion: Region {
+        item: innerContainer
+
+        Region {
+            item: maskItemSquare
+            intersection: Intersection.Subtract
+            radius: Theme.screenCornerRadius
+        }
+
+        Region {
+            item: dock
+            intersection: Intersection.Combine
+            topLeftRadius: Theme.dockRadius
+            topRightRadius: Theme.dockRadius
+        }
+
+        Region {
+            item: dockBandLeft
+            intersection: Intersection.Combine
+
+            Region {
+                item: maskItemDockLeft
+                intersection: Intersection.Subtract
+                bottomRightRadius: Theme.dockRadius
+            }
+        }
+
+        Region {
+            item: dockBandRight
+            intersection: Intersection.Combine
+
+            Region {
+                item: maskItemDockRight
+                intersection: Intersection.Subtract
+                bottomLeftRadius: Theme.dockRadius
+            }
+        }
+    }
 
     required property var modelData
     property bool isDockHidden: true
@@ -37,38 +77,6 @@ PanelWindow {
         anchors.fill: parent
         layer.enabled: true
 
-        Rectangle {
-            anchors.fill: parent
-            color: Theme.surface
-            layer.enabled: true
-
-            layer.effect: MultiEffect {
-                maskSource: maskItem
-                maskEnabled: true
-                maskInverted: true
-                maskThresholdMin: 0.5
-                maskSpreadAtMin: 1
-                autoPaddingEnabled: false
-            }
-        }
-
-        Item {
-            id: maskItem
-
-            anchors.fill: parent
-            layer.enabled: true
-            visible: false
-
-            Rectangle {
-                radius: Theme.screenCornerRadius
-                anchors.fill: parent
-                anchors.topMargin: Theme.barHeight + Theme.gothTop
-                anchors.bottomMargin: Theme.frameWidth + Theme.gothBottom
-                anchors.leftMargin: Theme.frameWidth + Theme.gothLeft
-                anchors.rightMargin: Theme.frameWidth + Theme.gothRight
-            }
-        }
-
         layer.effect: MultiEffect {
             shadowEnabled: Theme.frameShadowEnabled
             shadowBlur: Theme.frameShadowBlur
@@ -76,97 +84,138 @@ PanelWindow {
             blurMultiplier: 1
         }
 
-        Rectangle {
-            id: dockBandLeft
+        Item {
+            id: innerContainer
 
-            color: Theme.surface
+            opacity: Theme.surfaceOpacity
             layer.enabled: true
 
-            // to make sure the concave corner is drawn fully
-            implicitWidth: Theme.dockRadius * 2
+            anchors.fill: parent
 
-            anchors {
-                top: dock.top
-                bottom: dock.bottom
-                right: dock.left
-                bottomMargin: Theme.frameWidth
-            }
+            Rectangle {
+                anchors.fill: parent
+                color: Theme.surface
+                layer.enabled: true
 
-            layer.effect: MultiEffect {
-                maskSource: maskItemDockLeft
-                maskEnabled: true
-                maskInverted: true
-                maskThresholdMin: 0.5
-                maskSpreadAtMin: 1
-                autoPaddingEnabled: false
+                layer.effect: MultiEffect {
+                    maskSource: maskItem
+                    maskEnabled: true
+                    maskInverted: true
+                    maskThresholdMin: 0.5
+                    maskSpreadAtMin: 1
+                    autoPaddingEnabled: false
+                }
             }
 
             Item {
-                id: maskItemDockLeft
+                id: maskItem
 
                 anchors.fill: parent
                 layer.enabled: true
                 visible: false
 
                 Rectangle {
-                    bottomRightRadius: Theme.dockRadius
+                    id: maskItemSquare
+
+                    radius: Theme.screenCornerRadius
                     anchors.fill: parent
+                    anchors.topMargin: Theme.barHeight + Theme.gothTop
+                    anchors.bottomMargin: Theme.frameWidth + Theme.gothBottom
+                    anchors.leftMargin: Theme.frameWidth + Theme.gothLeft
+                    anchors.rightMargin: Theme.frameWidth + Theme.gothRight
                 }
             }
-        }
 
-        Rectangle {
-            id: dockBandRight
+            Rectangle {
+                id: dockBandLeft
 
-            color: Theme.surface
-            layer.enabled: true
-
-            // to make sure the concave corner is drawn fully
-            implicitWidth: Theme.dockRadius * 2
-
-            anchors {
-                top: dock.top
-                bottom: dock.bottom
-                left: dock.right
-                bottomMargin: Theme.frameWidth
-            }
-
-            layer.effect: MultiEffect {
-                maskSource: maskItemDockRight
-                maskEnabled: true
-                maskInverted: true
-                maskThresholdMin: 0.5
-                maskSpreadAtMin: 1
-                autoPaddingEnabled: false
-            }
-
-            Item {
-                id: maskItemDockRight
-
-                anchors.fill: parent
+                color: Theme.surface
                 layer.enabled: true
-                visible: false
 
-                Rectangle {
-                    bottomLeftRadius: Theme.dockRadius
+                // to make sure the concave corner is drawn fully
+                implicitWidth: Theme.dockRadius * 2
+
+                anchors {
+                    top: dock.top
+                    bottom: dock.bottom
+                    right: dock.left
+                }
+
+                layer.effect: MultiEffect {
+                    maskSource: maskItemDockLeft
+                    maskEnabled: true
+                    maskInverted: true
+                    maskThresholdMin: 0.5
+                    maskSpreadAtMin: 1
+                    autoPaddingEnabled: false
+                }
+
+                Item {
+                    id: maskItemDockLeft
+
                     anchors.fill: parent
+                    layer.enabled: true
+                    visible: false
+
+                    Rectangle {
+                        bottomRightRadius: Theme.dockRadius
+                        anchors.fill: parent
+                    }
                 }
             }
-        }
 
-        Dock {
-            id: dock
+            Rectangle {
+                id: dockBandRight
 
-            anchors {
-                bottom: parent.bottom
-                bottomMargin: root.isDockHidden ? -dock.height : 0
-                horizontalCenter: parent.horizontalCenter
+                color: Theme.surface
+                layer.enabled: true
+
+                // to make sure the concave corner is drawn fully
+                implicitWidth: Theme.dockRadius * 2
+
+                anchors {
+                    top: dock.top
+                    bottom: dock.bottom
+                    left: dock.right
+                }
+
+                layer.effect: MultiEffect {
+                    maskSource: maskItemDockRight
+                    maskEnabled: true
+                    maskInverted: true
+                    maskThresholdMin: 0.5
+                    maskSpreadAtMin: 1
+                    autoPaddingEnabled: false
+                }
+
+                Item {
+                    id: maskItemDockRight
+
+                    anchors.fill: parent
+                    layer.enabled: true
+                    visible: false
+
+                    Rectangle {
+                        bottomLeftRadius: Theme.dockRadius
+                        anchors.fill: parent
+                    }
+                }
             }
 
-            Behavior on anchors.bottomMargin {
-                NumberAnimation {
-                    duration: Theme.dockAnimationDuration
-                    easing.type: Easing.OutQuart
+            Dock {
+                id: dock
+
+                anchors {
+                    bottom: parent.bottom
+                    bottomMargin: root.isDockHidden ? -dock.height : Theme.frameWidth
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                Behavior on anchors.bottomMargin {
+                    NumberAnimation {
+                        duration: Theme.dockAnimationDuration
+                        easing.type: Easing.OutQuart
+                    }
                 }
             }
         }
