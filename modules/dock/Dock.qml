@@ -17,8 +17,6 @@ Item {
         topRightRadius: Theme.dockRadius
         topLeftRadius: Theme.dockRadius
 
-        visible: true // will change this to only be visible on hover later
-
         implicitHeight: (Theme.iconSize + Theme.dockMargin * 2) + Theme.frameWidth
         implicitWidth: ((Theme.iconSize + Theme.dockMargin) * dockRepeater.model) + Theme.dockMargin
         RowLayout {

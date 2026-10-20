@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
 import Quickshell
+import Quickshell.Io
 import qs.config
 import qs.modules.bar
 import qs.modules.dock
@@ -10,10 +11,18 @@ PanelWindow {
     id: root
 
     required property var modelData
+    property bool isDockHidden: true
 
     screen: modelData
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
+
+    IpcHandler {
+        target: `dock-${root.screen.name}`
+        function toggleVisibility(): void {
+            root.isDockHidden = !root.isDockHidden;
+        }
+    }
 
     anchors {
         top: true
@@ -70,16 +79,17 @@ PanelWindow {
         Rectangle {
             id: dockBandLeft
 
-            visible: false // only temporary to hide while I'm working on it
-
             color: Theme.surface
             layer.enabled: true
+
+            // to make sure the concave corner is drawn fully
+            implicitWidth: Theme.dockRadius * 2
 
             anchors {
                 top: dock.top
                 bottom: dock.bottom
                 right: dock.left
-                left: container.left
+                bottomMargin: Theme.frameWidth
             }
 
             layer.effect: MultiEffect {
@@ -101,7 +111,6 @@ PanelWindow {
                 Rectangle {
                     bottomRightRadius: Theme.dockRadius
                     anchors.fill: parent
-                    anchors.bottomMargin: Theme.frameWidth
                 }
             }
         }
@@ -109,16 +118,17 @@ PanelWindow {
         Rectangle {
             id: dockBandRight
 
-            visible: false // only temporary to hide while I'm working on it
-
             color: Theme.surface
             layer.enabled: true
+
+            // to make sure the concave corner is drawn fully
+            implicitWidth: Theme.dockRadius * 2
 
             anchors {
                 top: dock.top
                 bottom: dock.bottom
-                right: container.right
                 left: dock.right
+                bottomMargin: Theme.frameWidth
             }
 
             layer.effect: MultiEffect {
@@ -140,7 +150,6 @@ PanelWindow {
                 Rectangle {
                     bottomLeftRadius: Theme.dockRadius
                     anchors.fill: parent
-                    anchors.bottomMargin: Theme.frameWidth
                 }
             }
         }
@@ -148,11 +157,17 @@ PanelWindow {
         Dock {
             id: dock
 
-            visible: false // only temporary to hide while I'm working on it
-
             anchors {
                 bottom: parent.bottom
+                bottomMargin: root.isDockHidden ? -dock.height : 0
                 horizontalCenter: parent.horizontalCenter
+            }
+
+            Behavior on anchors.bottomMargin {
+                NumberAnimation {
+                    duration: Theme.dockAnimationDuration
+                    easing.type: Easing.OutQuart
+                }
             }
         }
     }

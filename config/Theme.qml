@@ -82,6 +82,7 @@ Singleton {
     readonly property real railPadding: 0 // extra rail width, only used when railSquareMode is false
     readonly property real railMaxWidthRatio: 2
     // Animations and Extras
+    readonly property real dockAnimationDuration: 200
     readonly property real rippleDurationScalePress: 300
     readonly property real rippleDurationOpacityPress: 80
     readonly property real rippleDurationOpacityRelease: 250
