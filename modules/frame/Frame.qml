@@ -57,6 +57,24 @@ PanelWindow {
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
 
+    Timer {
+        id: dockShowTimer
+        interval: Theme.dockShowDelay
+        onTriggered: {
+            if (dockHoverHandler.hovered)
+                root.isDockHidden = false;
+        }
+    }
+
+    Timer {
+        id: dockHideTimer
+        interval: Theme.dockHideDelay
+        onTriggered: {
+            if (!dockHoverHandler.hovered)
+                root.isDockHidden = true;
+        }
+    }
+
     IpcHandler {
         target: `dock-${root.screen.name}`
         function toggleVisibility(): void {
@@ -202,6 +220,29 @@ PanelWindow {
                 }
             }
 
+            Item {
+                id: dockHoverZone
+
+                implicitWidth: dock.width
+                implicitHeight: (root.isDockHidden ? Theme.dockHoverZoneHeight : dock.height) + Theme.frameWidth
+
+                anchors {
+                    bottom: parent.bottom
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                HoverHandler {
+                    id: dockHoverHandler
+
+                    onHoveredChanged: {
+                        if (root.isDockHidden)
+                            dockShowTimer.restart();
+                        else
+                            dockHideTimer.restart();
+                    }
+                }
+            }
+
             Dock {
                 id: dock
 
@@ -239,6 +280,10 @@ PanelWindow {
 
         Region {
             item: dock
+        }
+
+        Region {
+            item: dockHoverZone
         }
     }
 }

@@ -53,11 +53,14 @@ Singleton {
     readonly property real gothLeft: 0
     readonly property real gothRight: 0
     readonly property real gothTop: 0
-    readonly property real frameWidth: 12
+    readonly property real frameWidth: 15
     // Dock
     readonly property real dockMargin: 7
+    readonly property real dockHoverZoneHeight: 20
     readonly property int iconSize: 64 // placeholder
     readonly property real dockRadius: screenCornerRadius
+    readonly property real dockShowDelay: 150
+    readonly property real dockHideDelay: 500
     // Shadows
     readonly property bool widgetShadowEnabled: false
     readonly property color widgetShadowColor: Qt.alpha(shadowColor, widgetShadowOpacity)
