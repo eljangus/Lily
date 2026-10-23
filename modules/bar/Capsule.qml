@@ -34,7 +34,7 @@ Item {
 
         anchors.fill: root
         radius: Theme.capsuleRadius
-        color: Qt.alpha(((pointHandler.active || hoverHandler.hovered) ? Theme.surfaceContainerHigh : Theme.surfaceContainer), Theme.capsuleOpacity)
+        color: Qt.alpha(Theme.surfaceContainer, Theme.capsuleOpacity)
 
         PointHandler {
             id: pointHandler
@@ -55,6 +55,21 @@ Item {
             anchors.fill: parent
         }
 
+        Rectangle {
+            id: capsuleOverlay
+
+            anchors.fill: capsule
+            radius: Theme.capsuleRadius
+            color: Theme.textOnSurface
+            opacity: hoverHandler.hovered || pointHandler.active ? Theme.overlayOpacity : 0
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Theme.overlayAnimationDuration
+                }
+            }
+        }
+
         RowLayout {
             id: inner
 
@@ -62,12 +77,6 @@ Item {
 
             anchors {
                 centerIn: capsule
-            }
-        }
-
-        Behavior on color {
-            ColorAnimation {
-                duration: 150
             }
         }
     }

@@ -95,7 +95,6 @@ Capsule {
 
             font.family: Theme.fontFamily
             font.pixelSize: root.railFontSize
-            font.weight: Font.Bold
         }
 
         CenteredText {
@@ -105,10 +104,9 @@ Capsule {
             width: rail.width - root.textGap * 2
             anchors.centerIn: rail
             text: root.getWsText()
-            color: Theme.surfaceContainer
+            color: Theme.textOnPrimary
             font.pixelSize: root.railFontSize
             font.family: Theme.fontFamily
-            font.weight: Font.Bold
         }
     }
 

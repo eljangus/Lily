@@ -15,8 +15,6 @@ Item {
         maskSpreadAtMin: 1
     }
 
-    opacity: Theme.rippleOpacity
-
     required property real rootRadius
     property RippleCircle newestCircle
 
@@ -63,7 +61,7 @@ Item {
         height: circleDiameter
         x: posX - (ripple.width / 2)
         y: posY - (ripple.height / 2)
-        color: Theme.surfaceContainerHighest
+        color: Theme.textOnSurface
         radius: Math.max(width, height) * 0.5
         opacity: 0
 
@@ -92,7 +90,7 @@ Item {
             target: ripple
             property: "opacity"
             from: 0
-            to: 1
+            to: Theme.overlayOpacity
             duration: Theme.rippleDurationOpacityPress
         }
 

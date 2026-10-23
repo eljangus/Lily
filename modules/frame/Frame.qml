@@ -18,6 +18,8 @@ PanelWindow {
             item: maskItemSquare
             intersection: Intersection.Subtract
             radius: Theme.screenCornerRadius
+            bottomLeftRadius: (Theme.frameWidth === 0) ? 0 : Theme.screenCornerRadius
+            bottomRightRadius: (Theme.frameWidth === 0) ? 0 : Theme.screenCornerRadius
         }
 
         Region {
@@ -136,6 +138,8 @@ PanelWindow {
                     id: maskItemSquare
 
                     radius: Theme.screenCornerRadius
+                    bottomLeftRadius: (Theme.frameWidth === 0) ? 0 : Theme.screenCornerRadius
+                    bottomRightRadius: (Theme.frameWidth === 0) ? 0 : Theme.screenCornerRadius
                     anchors.fill: parent
                     anchors.topMargin: Theme.barHeight + Theme.gothTop
                     anchors.bottomMargin: Theme.frameWidth + Theme.gothBottom
